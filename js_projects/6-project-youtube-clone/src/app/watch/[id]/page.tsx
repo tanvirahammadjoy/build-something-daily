@@ -1,23 +1,27 @@
 // src/app/watch/[id]/page.tsx
-import { notFound } from 'next/navigation'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
-import { VideoPlayer } from '@/components/video/VideoPlayer'
-import { LikeButtons } from '@/components/video/LikeButtons'
-import { SubscribeButton } from '@/components/video/SubscribeButton'
-import { CommentSection } from '@/components/comments/CommentSection'
-import { VideoCard } from '@/components/video/VideoCard'
-import { formatViews, formatRelativeTime, formatSubscribers } from '@/lib/utils'
-import Image from 'next/image'
-import Link from 'next/link'
+import { notFound } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { VideoPlayer } from "@/components/video/VideoPlayer";
+import { LikeButtons } from "@/components/video/LikeButtons";
+import { SubscribeButton } from "@/components/video/SubscribeButton";
+import { CommentSection } from "@/components/comments/CommentSection";
+import { VideoCard } from "@/components/video/VideoCard";
+import {
+  formatViews,
+  formatRelativeTime,
+  formatSubscribers,
+} from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 
 interface WatchPageProps {
-  params: { id: string }
+  params: { id: string };
 }
 
 export default async function WatchPage({ params }: WatchPageProps) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
   // Fetch video with owner info
   const video = await prisma.video.findUnique({
@@ -34,12 +38,14 @@ export default async function WatchPage({ params }: WatchPageProps) {
       },
       _count: { select: { likes: true, comments: true } },
     },
-  })
+  });
 
-  if (!video) notFound()
+  if (!video) notFound();
 
   // Increment view count (fire-and-forget)
-  prisma.video.update({ where: { id: video.id }, data: { views: { increment: 1 } } }).catch(() => {})
+  prisma.video
+    .update({ where: { id: video.id }, data: { views: { increment: 1 } } })
+    .catch(() => {});
 
   // Sidebar recommendations — exclude current video
   const related = await prisma.video.findMany({
@@ -48,16 +54,18 @@ export default async function WatchPage({ params }: WatchPageProps) {
       user: { select: { id: true, name: true, image: true, handle: true } },
       _count: { select: { likes: true, comments: true } },
     },
-    orderBy: { views: 'desc' },
+    orderBy: { views: "desc" },
     take: 8,
-  })
+  });
 
   // Check if current user has liked this video
   const userLike = session?.user?.id
     ? await prisma.like.findUnique({
-        where: { userId_videoId: { userId: session.user.id, videoId: video.id } },
+        where: {
+          userId_videoId: { userId: session.user.id, videoId: video.id },
+        },
       })
-    : null
+    : null;
 
   // Check if current user is subscribed
   const isSubscribed = session?.user?.id
@@ -69,7 +77,7 @@ export default async function WatchPage({ params }: WatchPageProps) {
           },
         },
       }))
-    : false
+    : false;
 
   return (
     <div className="flex gap-6 p-6">
@@ -98,12 +106,20 @@ export default async function WatchPage({ params }: WatchPageProps) {
           <Link href={`/profile/${video.user.id}`}>
             <div className="relative h-10 w-10 overflow-hidden rounded-full bg-neutral-700">
               {video.user.image && (
-                <Image src={video.user.image} alt={video.user.name ?? ''} fill className="object-cover" />
+                <Image
+                  src={video.user.image}
+                  alt={video.user.name ?? ""}
+                  fill
+                  className="object-cover"
+                />
               )}
             </div>
           </Link>
           <div className="flex-1">
-            <Link href={`/profile/${video.user.id}`} className="font-medium text-white hover:underline">
+            <Link
+              href={`/profile/${video.user.id}`}
+              className="font-medium text-white hover:underline"
+            >
               {video.user.name}
             </Link>
             <p className="text-xs text-neutral-400">
@@ -121,7 +137,9 @@ export default async function WatchPage({ params }: WatchPageProps) {
         {/* Description */}
         {video.description && (
           <details className="mt-4 rounded-xl bg-neutral-900 p-4">
-            <summary className="cursor-pointer text-sm font-medium text-white">Description</summary>
+            <summary className="cursor-pointer text-sm font-medium text-white">
+              Description
+            </summary>
             <p className="mt-3 whitespace-pre-wrap text-sm text-neutral-300 leading-relaxed">
               {video.description}
             </p>
@@ -143,5 +161,5 @@ export default async function WatchPage({ params }: WatchPageProps) {
         ))}
       </aside>
     </div>
-  )
+  );
 }

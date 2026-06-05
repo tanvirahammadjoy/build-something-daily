@@ -1,11 +1,11 @@
 // src/components/video/VideoCard.tsx
-import Link from 'next/link'
-import Image from 'next/image'
-import { VideoWithUser } from '@/types'
-import { formatViews, formatDuration, formatRelativeTime } from '@/lib/utils'
+import Link from "next/link";
+import Image from "next/image";
+import { VideoWithUser } from "@/types";
+import { formatViews, formatDuration, formatRelativeTime } from "@/lib/utils";
 
 interface VideoCardProps {
-  video: VideoWithUser
+  video: VideoWithUser;
 }
 
 export function VideoCard({ video }: VideoCardProps) {
@@ -23,8 +23,18 @@ export function VideoCard({ video }: VideoCardProps) {
           />
         ) : (
           <div className="flex h-full items-center justify-center text-neutral-600">
-            <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            <svg
+              className="h-12 w-12"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
             </svg>
           </div>
         )}
@@ -39,13 +49,22 @@ export function VideoCard({ video }: VideoCardProps) {
       {/* Metadata */}
       <div className="flex gap-3">
         {/* Channel avatar */}
-        <Link href={`/profile/${video.user.id}`} className="shrink-0" onClick={(e) => e.stopPropagation()}>
+        <Link
+          href={`/profile/${video.user.id}`}
+          className="shrink-0"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="relative h-9 w-9 overflow-hidden rounded-full bg-neutral-700">
             {video.user.image ? (
-              <Image src={video.user.image} alt={video.user.name ?? ''} fill className="object-cover" />
+              <Image
+                src={video.user.image}
+                alt={video.user.name ?? ""}
+                fill
+                className="object-cover"
+              />
             ) : (
               <span className="flex h-full w-full items-center justify-center text-sm font-bold text-white">
-                {video.user.name?.[0]?.toUpperCase() ?? '?'}
+                {video.user.name?.[0]?.toUpperCase() ?? "?"}
               </span>
             )}
           </div>
@@ -68,5 +87,5 @@ export function VideoCard({ video }: VideoCardProps) {
         </div>
       </div>
     </Link>
-  )
+  );
 }

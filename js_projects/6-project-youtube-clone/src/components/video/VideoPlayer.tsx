@@ -1,10 +1,10 @@
-'use client'
+"use client";
 // src/components/video/VideoPlayer.tsx
-import ReactPlayer from 'react-player/lazy'
+import ReactPlayer from "react-player/lazy";
 
 interface VideoPlayerProps {
-  url: string
-  title: string
+  url: string;
+  title: string;
 }
 
 export function VideoPlayer({ url, title }: VideoPlayerProps) {
@@ -21,5 +21,5 @@ export function VideoPlayer({ url, title }: VideoPlayerProps) {
         }}
       />
     </div>
-  )
+  );
 }
