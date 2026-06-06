@@ -31,9 +31,18 @@ export default async function LibraryPage() {
     },
   });
 
+  // const subscriptions = await prisma.subscription.findMany({
+  //   where: {
+  //     subscriberId: userId,
+  //   },
+  // });
+
   const subscriptions = await prisma.subscription.findMany({
     where: {
-      subscriberId: userId,
+      followerId: userId,
+    },
+    include: {
+      following: true,
     },
   });
 
