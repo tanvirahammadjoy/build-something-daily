@@ -8,10 +8,15 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "StreamForge",
-  description: "A full-stack YouTube clone built with Next.js, Prisma, and Cloudinary",
+  description:
+    "A full-stack YouTube clone built with Next.js, Prisma, and Cloudinary",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-950`}>

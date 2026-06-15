@@ -1,10 +1,9 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 enum VideoStatus {
@@ -36,6 +35,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   accounts      Account[]
+  sessions      Session[]
+
   videos        Video[]
   comments      Comment[]
   likes         Like[]
@@ -47,8 +48,6 @@ model User {
 
   notifications      Notification[] @relation("NotificationRecipient")
   actedNotifications Notification[] @relation("NotificationActor")
-
-  sesions Session[]
 
   @@map("users")
 }
@@ -133,8 +132,8 @@ model Comment {
   videoId  String
   parentId String?
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  video   Video   @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video   Video     @relation(fields: [videoId], references: [id], onDelete: Cascade)
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies Comment[] @relation("CommentReplies")
 

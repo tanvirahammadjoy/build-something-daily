@@ -8,7 +8,11 @@ const CommentSchema = z.object({
   parentId: z.string().optional(),
 });
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const session = await getServerSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -22,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       where: { id: result.data.parentId },
       select: { videoId: true, parentId: true },
     });
-    if (!parent || parent.videoId !== params.id)
+    if (!parent || parent.videoId !== id)
       return NextResponse.json({ error: "Parent comment not found" }, { status: 404 });
     if (parent.parentId) {
       const grandparent = await prisma.comment.findUnique({
@@ -38,7 +42,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     data: {
       body: result.data.body,
       userId: session.user.id,
-      videoId: params.id,
+      videoId: id,
       parentId: result.data.parentId ?? null,
     },
     include: {
@@ -50,13 +54,17 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   return NextResponse.json({ comment }, { status: 201 });
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const { searchParams } = new URL(req.url);
   const cursor = searchParams.get("cursor") ?? undefined;
   const limit = 10;
 
   const comments = await prisma.comment.findMany({
-    where: { videoId: params.id, parentId: null },
+    where: { videoId: id, parentId: null },
     orderBy: { createdAt: "desc" },
     take: limit + 1,
     ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),

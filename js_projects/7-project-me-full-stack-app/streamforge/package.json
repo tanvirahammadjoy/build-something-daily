@@ -1,65 +1,47 @@
 {
-    "name": "streamforge",
-    "version": "0.1.0",
-    "private": true,
-    "description": "A fully functional YouTube clone built with Next.js 14 App Router, TypeScript, Prisma, PostgreSQL, NextAuth, and Cloudinary.",
-    "license": "ISC",
-    "author": "",
-    "type": "module",
-    "main": "postcss.config.js",
-    "directories": {
-        "lib": "lib"
-    },
-    "scripts": {
-        "dev": "next dev",
-        "build": "prisma generate && next build",
-        "start": "next start",
-        "lint": "next lint",
-        "db:migrate": "prisma migrate dev",
-        "db:push": "prisma db push",
-        "db:studio": "prisma studio",
-        "db:reset": "prisma migrate reset",
-        "postinstall": "prisma generate"
-    },
-    "dependencies": {
-        "@auth/prisma-adapter": "^1.0.0",
-        "@prisma/adapter-pg": "^7.8.0",
-        "@prisma/client": "^7.8.0",
-        "bcryptjs": "^2.4.3",
-        "cloudinary": "^1.41.3",
-        "dotenv": "^17.4.2",
-        "hls.js": "^1.5.0",
-        "next": "^16.2.9",
-        "next-auth": "^4.24.0",
-        "next-cloudinary": "^6.17.5",
-        "pg": "^8.21.0",
-        "react": "^19.2.7",
-        "react-dom": "^19.2.7",
-        "recharts": "^2.12.0",
-        "zod": "^3.22.0"
-    },
-    "devDependencies": {
-        "@types/bcryptjs": "^2.4.6",
-        "@types/hls.js": "^1.0.0",
-        "@types/node": "^20.19.43",
-        "@types/pg": "^8.20.0",
-        "@types/react": "^19.2.17",
-        "@types/react-dom": "^19.2.3",
-        "autoprefixer": "^10.0.1",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.0",
-        "postcss": "^8",
-        "prisma": "^7.8.0",
-        "tailwindcss": "^3.3.0",
-        "tsx": "^4.22.4",
-        "typescript": "^5.9.3"
-    },
-    "compilerOptions": {
-        "baseUrl": ".",
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ]
-        }
-    }
+  "name": "streamforge",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^2.0.0",
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.0.0",
+    "hls.js": "^1.5.0",
+    "next": "^15.0.0",
+    "next-auth": "^4.24.0",
+    "next-cloudinary": "^6.0.0",
+    "pg": "^8.11.0",
+    "react": "^19",
+    "react-dom": "^19",
+    "recharts": "^2.12.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/hls.js": "^1.0.0",
+    "@types/node": "^20",
+    "@types/pg": "^8.11.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^9",
+    "eslint-config-next": "^15.0.0",
+    "postcss": "^8",
+    "prisma": "^7.0.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
 }

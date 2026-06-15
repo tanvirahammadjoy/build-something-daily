@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string; commentId: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string; commentId: string }> }
+) {
+  const { id, commentId } = await params;
   const { searchParams } = new URL(req.url);
   const cursor = searchParams.get("cursor") ?? undefined;
   const limit = 10;
 
   const replies = await prisma.comment.findMany({
-    where: { parentId: params.commentId, videoId: params.id },
+    where: { parentId: commentId, videoId: id },
     orderBy: { createdAt: "asc" },
     take: limit + 1,
     ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),

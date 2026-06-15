@@ -12,22 +12,28 @@ const UpdateVideoSchema = z.object({
   tagNames: z.array(z.string()).max(10).optional(),
 });
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const session = await getServerSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const video = await prisma.video.findUnique({ where: { id: params.id }, select: { userId: true } });
+  const video = await prisma.video.findUnique({ where: { id }, select: { userId: true } });
   if (!video) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  if (video.userId !== session.user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (video.userId !== session.user.id)
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
   const result = UpdateVideoSchema.safeParse(body);
-  if (!result.success) return NextResponse.json({ error: result.error.errors[0].message }, { status: 400 });
+  if (!result.success)
+    return NextResponse.json({ error: result.error.errors[0].message }, { status: 400 });
 
   const { tagNames, ...fields } = result.data;
 
   const updated = await prisma.video.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       ...fields,
       ...(tagNames !== undefined && {
@@ -46,13 +52,21 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   return NextResponse.json({ video: updated });
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
   const session = await getServerSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const video = await prisma.video.findUnique({ where: { id: params.id }, select: { userId: true, publicId: true } });
+  const video = await prisma.video.findUnique({
+    where: { id },
+    select: { userId: true, publicId: true },
+  });
   if (!video) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  if (video.userId !== session.user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (video.userId !== session.user.id)
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   try {
     await cloudinary.uploader.destroy(video.publicId, { resource_type: "video" });
@@ -60,6 +74,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
     console.error("[DELETE_VIDEO] Cloudinary deletion failed:", err);
   }
 
-  await prisma.video.delete({ where: { id: params.id } });
+  await prisma.video.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }
