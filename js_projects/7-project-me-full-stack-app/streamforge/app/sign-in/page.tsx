@@ -41,7 +41,9 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="w-full max-w-md p-8 rounded-2xl bg-gray-900 border border-gray-800">
         <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
-        <p className="text-gray-400 text-sm mb-8">Sign in to your StreamForge account</p>
+        <p className="text-gray-400 text-sm mb-8">
+          Sign in to your StreamForge account
+        </p>
 
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -78,7 +80,9 @@ export default function SignInPage() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-1.5">Password</label>
+            <label className="block text-sm text-gray-400 mb-1.5">
+              Password
+            </label>
             <input
               type="password"
               value={form.password}
@@ -99,7 +103,9 @@ export default function SignInPage() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-blue-400 hover:text-blue-300">Sign up</Link>
+          <Link href="/sign-up" className="text-blue-400 hover:text-blue-300">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>

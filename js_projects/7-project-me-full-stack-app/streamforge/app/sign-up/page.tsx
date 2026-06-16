@@ -50,8 +50,12 @@ export default function SignUpPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="w-full max-w-md p-8 rounded-2xl bg-gray-900 border border-gray-800">
-        <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
-        <p className="text-gray-400 text-sm mb-8">Start uploading and watching on StreamForge</p>
+        <h1 className="text-2xl font-bold text-white mb-2">
+          Create your account
+        </h1>
+        <p className="text-gray-400 text-sm mb-8">
+          Start uploading and watching on StreamForge
+        </p>
 
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
@@ -77,12 +81,29 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {[
-            { label: "Name", key: "name", type: "text", placeholder: "Your name" },
-            { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
-            { label: "Password", key: "password", type: "password", placeholder: "Min. 8 chars, 1 uppercase, 1 number" },
+            {
+              label: "Name",
+              key: "name",
+              type: "text",
+              placeholder: "Your name",
+            },
+            {
+              label: "Email",
+              key: "email",
+              type: "email",
+              placeholder: "you@example.com",
+            },
+            {
+              label: "Password",
+              key: "password",
+              type: "password",
+              placeholder: "Min. 8 chars, 1 uppercase, 1 number",
+            },
           ].map(({ label, key, type, placeholder }) => (
             <div key={key}>
-              <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
+              <label className="block text-sm text-gray-400 mb-1.5">
+                {label}
+              </label>
               <input
                 type={type}
                 value={form[key as keyof typeof form]}
@@ -104,7 +125,9 @@ export default function SignUpPage() {
 
         <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?{" "}
-          <Link href="/sign-in" className="text-blue-400 hover:text-blue-300">Sign in</Link>
+          <Link href="/sign-in" className="text-blue-400 hover:text-blue-300">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>

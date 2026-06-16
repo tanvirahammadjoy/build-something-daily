@@ -20,7 +20,9 @@ export default async function NotificationsPage() {
     orderBy: { createdAt: "desc" },
     take: 50,
     include: {
-      actor: { select: { id: true, name: true, image: true, channelHandle: true } },
+      actor: {
+        select: { id: true, name: true, image: true, channelHandle: true },
+      },
       video: { select: { id: true, title: true, thumbnailUrl: true } },
     },
   });
@@ -31,29 +33,62 @@ export default async function NotificationsPage() {
         <h1 className="text-xl font-bold text-white mb-6">All notifications</h1>
         {notifications.length === 0 ? (
           <div className="text-center py-16 text-gray-500">
-            <p className="text-lg font-medium text-gray-400 mb-2">Nothing here yet</p>
-            <p className="text-sm">Subscribe to channels to get notified when they upload.</p>
+            <p className="text-lg font-medium text-gray-400 mb-2">
+              Nothing here yet
+            </p>
+            <p className="text-sm">
+              Subscribe to channels to get notified when they upload.
+            </p>
           </div>
         ) : (
           <div className="space-y-1">
             {notifications.map((n) => {
-              const href = n.video ? `/video/${n.video.id}` : `/channel/${n.actor.channelHandle ?? n.actor.id}`;
+              const href = n.video
+                ? `/video/${n.video.id}`
+                : `/channel/${n.actor.channelHandle ?? n.actor.id}`;
               return (
-                <Link key={n.id} href={href} className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-900 transition">
+                <Link
+                  key={n.id}
+                  href={href}
+                  className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-900 transition"
+                >
                   <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800 flex-shrink-0">
-                    {n.actor.image
-                      ? <Image src={n.actor.image} alt={n.actor.name ?? ""} width={40} height={40} className="object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-white text-sm">{n.actor.name?.[0]?.toUpperCase() ?? "?"}</div>
-                    }
+                    {n.actor.image ? (
+                      <Image
+                        src={n.actor.image}
+                        alt={n.actor.name ?? ""}
+                        width={40}
+                        height={40}
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white text-sm">
+                        {n.actor.name?.[0]?.toUpperCase() ?? "?"}
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-gray-200 text-sm">{notificationLabel(n as any)}</p>
-                    {n.video && <p className="text-gray-500 text-xs mt-0.5 truncate">{n.video.title}</p>}
-                    <p className="text-gray-600 text-xs mt-1">{formatRelativeTime(n.createdAt)}</p>
+                    <p className="text-gray-200 text-sm">
+                      {notificationLabel(n as any)}
+                    </p>
+                    {n.video && (
+                      <p className="text-gray-500 text-xs mt-0.5 truncate">
+                        {n.video.title}
+                      </p>
+                    )}
+                    <p className="text-gray-600 text-xs mt-1">
+                      {formatRelativeTime(n.createdAt)}
+                    </p>
                   </div>
                   {n.video?.thumbnailUrl && (
                     <div className="w-16 aspect-video rounded-lg overflow-hidden bg-gray-800 flex-shrink-0">
-                      <Image src={n.video.thumbnailUrl} alt={n.video.title} width={64} height={36} className="object-cover w-full h-full" />
+                      <Image
+                        src={n.video.thumbnailUrl}
+                        alt={n.video.title}
+                        width={64}
+                        height={36}
+                        className="object-cover w-full h-full"
+                      />
                     </div>
                   )}
                 </Link>

@@ -16,8 +16,12 @@ export default async function HistoryPage() {
     include: {
       video: {
         include: {
-          user: { select: { id: true, name: true, image: true, channelHandle: true } },
-          _count: { select: { likes: { where: { isLike: true } }, comments: true } },
+          user: {
+            select: { id: true, name: true, image: true, channelHandle: true },
+          },
+          _count: {
+            select: { likes: { where: { isLike: true } }, comments: true },
+          },
         },
       },
     },
@@ -27,14 +31,20 @@ export default async function HistoryPage() {
     return (
       <main className="min-h-screen bg-gray-950 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-400 text-lg font-medium mb-2">No watch history yet</p>
-          <p className="text-gray-600 text-sm">Videos you watch will appear here.</p>
+          <p className="text-gray-400 text-lg font-medium mb-2">
+            No watch history yet
+          </p>
+          <p className="text-gray-600 text-sm">
+            Videos you watch will appear here.
+          </p>
         </div>
       </main>
     );
   }
 
-  const grouped = groupByDate(history.map((h) => ({ ...h.video, watchedAt: h.watchedAt })));
+  const grouped = groupByDate(
+    history.map((h) => ({ ...h.video, watchedAt: h.watchedAt })),
+  );
 
   return (
     <main className="min-h-screen bg-gray-950">
@@ -42,10 +52,15 @@ export default async function HistoryPage() {
         <h1 className="text-xl font-bold text-white mb-6">Watch history</h1>
         {Object.entries(grouped).map(([label, videos]) => (
           <div key={label} className="mb-8">
-            <h2 className="text-gray-500 text-sm font-medium mb-4 uppercase tracking-wide">{label}</h2>
+            <h2 className="text-gray-500 text-sm font-medium mb-4 uppercase tracking-wide">
+              {label}
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {videos.map((video) => (
-                <VideoCard key={video.id} video={video as unknown as VideoWithUser} />
+                <VideoCard
+                  key={video.id}
+                  video={video as unknown as VideoWithUser}
+                />
               ))}
             </div>
           </div>
@@ -63,7 +78,14 @@ function groupByDate(videos: any[]) {
   const groups: Record<string, typeof videos> = {};
   for (const v of videos) {
     const d = new Date(v.watchedAt);
-    const label = d >= today ? "Today" : d >= yesterday ? "Yesterday" : d >= weekAgo ? "This week" : "Older";
+    const label =
+      d >= today
+        ? "Today"
+        : d >= yesterday
+          ? "Yesterday"
+          : d >= weekAgo
+            ? "This week"
+            : "Older";
     if (!groups[label]) groups[label] = [];
     groups[label].push(v);
   }

@@ -23,7 +23,10 @@ export default async function VideoPage({
     include: {
       user: {
         select: {
-          id: true, name: true, image: true, channelHandle: true,
+          id: true,
+          name: true,
+          image: true,
+          channelHandle: true,
           _count: { select: { subscribers: true } },
         },
       },
@@ -46,9 +49,15 @@ export default async function VideoPage({
   if (session?.user?.id) {
     prisma.watchHistory
       .upsert({
-        where: { userId_videoId: { userId: session.user.id, videoId: video.id } },
+        where: {
+          userId_videoId: { userId: session.user.id, videoId: video.id },
+        },
         update: { watchedAt: new Date() },
-        create: { userId: session.user.id, videoId: video.id, watchedSeconds: 0 },
+        create: {
+          userId: session.user.id,
+          videoId: video.id,
+          watchedSeconds: 0,
+        },
       })
       .catch(console.error);
   }
@@ -74,7 +83,9 @@ export default async function VideoPage({
         />
 
         <div className="mt-4 flex items-start justify-between gap-4 flex-wrap">
-          <h1 className="text-xl font-semibold text-white flex-1 min-w-0">{video.title}</h1>
+          <h1 className="text-xl font-semibold text-white flex-1 min-w-0">
+            {video.title}
+          </h1>
           <div className="flex items-center gap-2">
             <LikeDislikeButtons
               videoId={video.id}
@@ -93,7 +104,13 @@ export default async function VideoPage({
           >
             <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
               {video.user.image ? (
-                <Image src={video.user.image} alt={video.user.name ?? ""} width={40} height={40} className="object-cover" />
+                <Image
+                  src={video.user.image}
+                  alt={video.user.name ?? ""}
+                  width={40}
+                  height={40}
+                  className="object-cover"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white">
                   {video.user.name?.[0]}
@@ -101,7 +118,9 @@ export default async function VideoPage({
               )}
             </div>
             <div>
-              <p className="text-white text-sm font-medium">{video.user.name}</p>
+              <p className="text-white text-sm font-medium">
+                {video.user.name}
+              </p>
               <p className="text-gray-500 text-xs">
                 {video.user._count.subscribers.toLocaleString()} subscribers
               </p>
@@ -121,12 +140,18 @@ export default async function VideoPage({
             {formatViews(video.views)} · {formatRelativeTime(video.createdAt)}
           </p>
           {video.description && (
-            <p className="text-gray-300 text-sm mt-2 whitespace-pre-wrap">{video.description}</p>
+            <p className="text-gray-300 text-sm mt-2 whitespace-pre-wrap">
+              {video.description}
+            </p>
           )}
           {video.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {video.tags.map((t) => (
-                <Link key={t.name} href={`/search?tag=${t.name}`} className="text-blue-400 text-xs hover:text-blue-300">
+                <Link
+                  key={t.name}
+                  href={`/search?tag=${t.name}`}
+                  className="text-blue-400 text-xs hover:text-blue-300"
+                >
                   #{t.name}
                 </Link>
               ))}

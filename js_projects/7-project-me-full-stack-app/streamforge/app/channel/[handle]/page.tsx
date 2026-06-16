@@ -46,8 +46,12 @@ export default async function ChannelPage({
     orderBy: { createdAt: "desc" },
     take: 13,
     include: {
-      user: { select: { id: true, name: true, image: true, channelHandle: true } },
-      _count: { select: { likes: { where: { isLike: true } }, comments: true } },
+      user: {
+        select: { id: true, name: true, image: true, channelHandle: true },
+      },
+      _count: {
+        select: { likes: { where: { isLike: true } }, comments: true },
+      },
     },
   });
 
@@ -60,7 +64,13 @@ export default async function ChannelPage({
     <main className="min-h-screen bg-gray-950">
       <div className="relative w-full h-40 md:h-56 bg-gray-800 overflow-hidden">
         {channel.bannerImage ? (
-          <Image src={channel.bannerImage} alt="Channel banner" fill className="object-cover" priority />
+          <Image
+            src={channel.bannerImage}
+            alt="Channel banner"
+            fill
+            className="object-cover"
+            priority
+          />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900" />
         )}
@@ -70,7 +80,12 @@ export default async function ChannelPage({
         <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 -mt-10 mb-8">
           <div className="relative w-20 h-20 rounded-full border-4 border-gray-950 overflow-hidden flex-shrink-0 bg-gray-700">
             {channel.image ? (
-              <Image src={channel.image} alt={channel.name ?? "Channel"} fill className="object-cover" />
+              <Image
+                src={channel.image}
+                alt={channel.name ?? "Channel"}
+                fill
+                className="object-cover"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-white text-2xl font-bold">
                 {channel.name?.[0]?.toUpperCase() ?? "?"}
@@ -79,23 +94,35 @@ export default async function ChannelPage({
           </div>
 
           <div className="flex-1 min-w-0 pt-10 sm:pt-0">
-            <h1 className="text-xl font-bold text-white truncate">{channel.name}</h1>
-            <p className="text-gray-400 text-sm mt-0.5">
-              {channel.channelHandle} · {channel._count.subscribers.toLocaleString()} subscribers ·{" "}
+            <h1 className="text-xl font-bold text-white truncate">
+              {channel.name}
+            </h1>
+            <p className="text-gray-400 text-sm mt-4">
+              {channel.channelHandle} ·{" "}
+              {channel._count.subscribers.toLocaleString()} subscribers ·{" "}
               {channel._count.videos.toLocaleString()} videos
             </p>
             {channel.bio && (
-              <p className="text-gray-500 text-sm mt-2 line-clamp-2">{channel.bio}</p>
+              <p className="text-gray-500 text-sm mt-2 line-clamp-2">
+                {channel.bio}
+              </p>
             )}
           </div>
 
           <div className="flex gap-3 sm:ml-auto flex-shrink-0">
             {isOwner ? (
-              <a href="/settings/profile" className="px-5 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition">
+              <a
+                href="/settings/profile"
+                className="px-5 py-2 rounded-full bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition"
+              >
                 Edit channel
               </a>
             ) : (
-              <SubscribeButton channelId={channel.id} initialSubscribed={isSubscribed} isLoggedIn={!!session} />
+              <SubscribeButton
+                channelId={channel.id}
+                initialSubscribed={isSubscribed}
+                isLoggedIn={!!session}
+              />
             )}
           </div>
         </div>

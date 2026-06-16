@@ -11,9 +11,16 @@ export default async function StudioVideosPage() {
     where: { userId: session.user.id },
     orderBy: { createdAt: "desc" },
     select: {
-      id: true, title: true, status: true, views: true,
-      thumbnailUrl: true, createdAt: true, duration: true,
-      _count: { select: { likes: { where: { isLike: true } }, comments: true } },
+      id: true,
+      title: true,
+      status: true,
+      views: true,
+      thumbnailUrl: true,
+      createdAt: true,
+      duration: true,
+      _count: {
+        select: { likes: { where: { isLike: true } }, comments: true },
+      },
     },
   });
 
@@ -22,7 +29,10 @@ export default async function StudioVideosPage() {
       <div className="max-w-screen-xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-bold text-white">Your videos</h1>
-          <a href="/upload" className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition">
+          <a
+            href="/upload"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition"
+          >
             Upload new
           </a>
         </div>
