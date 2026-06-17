@@ -36,6 +36,7 @@ export async function Navbar() {
                             className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-full text-white text-sm placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
                         />
                         <button
+                            title="Search"
                             type="submit"
                             className="px-4 py-2 bg-gray-700 hover:bg-gray-600 border border-l-0 border-gray-700 rounded-r-full text-gray-300 transition"
                         >
