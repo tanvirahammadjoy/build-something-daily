@@ -21,18 +21,18 @@ A fully functional YouTube clone built with Next.js 14 App Router, TypeScript, P
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 14 (App Router) |
-| Language | TypeScript |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Auth | NextAuth.js v4 |
-| Storage | Cloudinary |
-| Styling | Tailwind CSS |
-| Charts | Recharts |
-| Video | hls.js |
-| Validation | Zod |
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Framework  | Next.js 14 (App Router) |
+| Language   | TypeScript              |
+| Database   | PostgreSQL              |
+| ORM        | Prisma                  |
+| Auth       | NextAuth.js v4          |
+| Storage    | Cloudinary              |
+| Styling    | Tailwind CSS            |
+| Charts     | Recharts                |
+| Video      | hls.js                  |
+| Validation | Zod                     |
 
 ## Getting Started
 
