@@ -78,7 +78,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Project Structure
 
-```
+```bash
 streamforge/
 ├── app/                    # Next.js App Router pages + API routes
 ├── components/             # Reusable UI components
