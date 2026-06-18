@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-ink text-paper;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  /* Keyboard focus must stay visible — accent ring, never removed */
+  :focus-visible {
+    outline: 2px solid #FF5A36;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Signature element: the "tick" — a small offset corner mark drawn from
+     film-leader / record-deck vernacular. Used on thumbnails, progress bars,
+     and stat cards as the one consistent recurring motif. Disciplined: one
+     accent color, one shape, repeated rather than decorated. */
+  .tick {
+    position: relative;
+  }
+  .tick::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 14px;
+    background: #FF5A36;
+    border-radius: 0 0 2px 0;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-flare px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-flare-dim disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink-raised px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-ink-border disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-paper-dim transition hover:text-paper hover:bg-ink-raised;
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-ink-border bg-ink-surface px-4 py-2.5 text-paper placeholder-paper-faint transition focus:border-flare focus:outline-none;
+  }
+  .card {
+    @apply rounded-xl2 border border-ink-border bg-ink-surface;
+  }
+}
