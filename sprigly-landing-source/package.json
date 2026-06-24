@@ -1,0 +1,20 @@
+{
+    "name": "sprigly-landing",
+    "version": "1.0.0",
+    "description": "A full-stack animated landing page for Sprigly, a smart indoor herb garden.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js"
+    },
+    "keywords": [
+        "landing-page",
+        "gsap",
+        "full-stack"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "gsap": "^3.15.0"
+    }
+}

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sprigly | Countertop Garden</title>
+        <meta
+            name="description"
+            content="Sprigly is a smart countertop herb garden with adaptive light, watering, and plant health guidance."
+        />
+        <link rel="stylesheet" href="/styles.css" />
+        <script defer src="/vendor/gsap.min.js"></script>
+        <script defer src="/vendor/ScrollTrigger.min.js"></script>
+        <script defer src="/app.js"></script>
+    </head>
+    <body>
+        <header class="site-header">
+            <a class="brand" href="#top" aria-label="Sprigly home">
+                <span class="brand-mark" aria-hidden="true"></span>
+                Sprigly
+            </a>
+            <nav class="nav-links" aria-label="Primary navigation">
+                <a href="#system">System</a>
+                <a href="#harvest">Harvest</a>
+                <a href="#reserve">Reserve</a>
+            </nav>
+        </header>
+
+        <main id="top">
+            <section class="hero-section" aria-labelledby="hero-title">
+                <div class="hero-copy">
+                    <p class="eyebrow reveal">Indoor herb garden</p>
+                    <h1 id="hero-title" class="reveal">
+                        Fresh herbs on autopilot.
+                    </h1>
+                    <p class="hero-text reveal">
+                        Sprigly learns your kitchen, tunes light and water by
+                        the hour, and keeps basil, mint, thyme, and cilantro
+                        harvest-ready on your counter.
+                    </p>
+                    <div class="hero-actions reveal">
+                        <a class="button primary" href="#reserve"
+                            >Join early access</a
+                        >
+                        <a class="button secondary" href="#system"
+                            >See the system</a
+                        >
+                    </div>
+                    <dl class="hero-stats reveal">
+                        <div>
+                            <dt>14</dt>
+                            <dd>day first harvest</dd>
+                        </div>
+                        <div>
+                            <dt>62%</dt>
+                            <dd>less water</dd>
+                        </div>
+                        <div>
+                            <dt>4</dt>
+                            <dd>grow modes</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <div
+                    class="hero-visual reveal"
+                    aria-label="Sprigly product render"
+                >
+                    <img
+                        src="/assets/sprigly-product.png"
+                        alt="Sprigly smart countertop herb garden with glowing grow lights"
+                    />
+                    <div class="sensor-card sensor-card-one">
+                        <span>Moisture</span>
+                        <strong>72%</strong>
+                    </div>
+                    <div class="sensor-card sensor-card-two">
+                        <span>Light cycle</span>
+                        <strong>Active</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section id="system" class="feature-band">
+                <div class="section-heading">
+                    <p class="eyebrow">System</p>
+                    <h2>
+                        Designed for real kitchens, not perfect lab conditions.
+                    </h2>
+                </div>
+                <div class="feature-grid">
+                    <article class="feature-card">
+                        <span class="feature-icon">01</span>
+                        <h3>Adaptive grow light</h3>
+                        <p>
+                            Warm task lighting after dinner, full-spectrum
+                            growth while you sleep.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <span class="feature-icon">02</span>
+                        <h3>Quiet water loop</h3>
+                        <p>
+                            A low-noise pump keeps roots hydrated without
+                            leaving puddles on the counter.
+                        </p>
+                    </article>
+                    <article class="feature-card">
+                        <span class="feature-icon">03</span>
+                        <h3>Plant health nudges</h3>
+                        <p>
+                            The app flags thinning, overgrowth, and harvest
+                            windows before flavor drops.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="harvest" class="harvest-section">
+                <div class="harvest-copy">
+                    <p class="eyebrow">Harvest</p>
+                    <h2>Pick what you cook. Sprigly handles the rest.</h2>
+                    <p>
+                        Choose recipe-ready pods, set a freshness goal, and let
+                        the base balance humidity, water, and light. The first
+                        pod set includes basil, parsley, mint, chives, cilantro,
+                        and thyme.
+                    </p>
+                </div>
+                <div class="pod-list" aria-label="Available herb pods">
+                    <span>Basil</span>
+                    <span>Mint</span>
+                    <span>Thyme</span>
+                    <span>Chives</span>
+                    <span>Cilantro</span>
+                    <span>Parsley</span>
+                </div>
+            </section>
+
+            <section
+                id="reserve"
+                class="reserve-section"
+                aria-labelledby="reserve-title"
+            >
+                <div class="reserve-copy">
+                    <p class="eyebrow">Reserve</p>
+                    <h2 id="reserve-title">Get launch access.</h2>
+                    <p>
+                        Early members get first shipment priority and a starter
+                        pod set included.
+                    </p>
+                </div>
+                <form class="waitlist-form" id="waitlist-form">
+                    <label>
+                        Name
+                        <input
+                            name="name"
+                            type="text"
+                            autocomplete="name"
+                            placeholder="Maya Lee"
+                            required
+                        />
+                    </label>
+                    <label>
+                        Email
+                        <input
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            placeholder="maya@example.com"
+                            required
+                        />
+                    </label>
+                    <label>
+                        Plan
+                        <select name="plan">
+                            <option value="starter">Starter kitchen</option>
+                            <option value="family">Family harvest</option>
+                            <option value="chef">Chef counter</option>
+                        </select>
+                    </label>
+                    <button class="button primary" type="submit">
+                        Reserve my spot
+                    </button>
+                    <p class="form-status" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
