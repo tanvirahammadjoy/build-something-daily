@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  /* A dark "field notebook" base rather than pure black, so surfaces have
+     some warmth instead of feeling like a void. */
+  --color-canvas: #14171c;
+  --color-surface: #1c2129;
+  --color-surface-hover: #232a33;
+  --color-border: #2a3038;
+
+  --color-ink: #e8e6e1;
+  --color-ink-muted: #8b919c;
+
+  /* Priority spine colors — deliberately not a single accent. Urgent reads
+     as brick (alarm), high as warm copper (attention), everything else
+     recedes toward teal/muted so the eye goes straight to what matters. */
+  --color-accent: #e8954a;
+  --color-accent-soft: #f2b679;
+  --color-teal: #5fa8a0;
+  --color-sage: #6fa888;
+  --color-brick: #d9685c;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+}
+
+/* Light theme override. Every color below was checked against the actual
+   text/background pairs used in the app with a WCAG contrast-ratio
+   calculator before being committed here (4.5:1 for text, 3:1 for the
+   checkbox icon on a colored fill) — not eyeballed, since this can't be
+   visually verified in this environment. Toggled via a `.light` class on
+   <html>; everything else just keeps using bg-canvas/text-ink/etc as-is,
+   since Tailwind v4 compiles those to var(--color-canvas) references that
+   pick up whichever value is in scope. */
+.light {
+  --color-canvas: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #ecf0f3;
+  --color-border: #cfd8df;
+
+  --color-ink: #1a1f26;
+  --color-ink-muted: #5b6470;
+
+  --color-accent: #9c5523;
+  --color-accent-soft: #a35d26;
+  --color-teal: #2e7a72;
+  --color-sage: #2f7a52;
+  --color-brick: #c23b2e;
+}
+
+html {
+  transition: background-color 150ms ease;
+  height: 100%;
+}
+
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-canvas text-ink font-body antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
