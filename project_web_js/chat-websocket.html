@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Real-time Chat - Node.js WebSocket</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+            :root {
+                --primary: #6366f1;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Inter', system-ui, sans-serif;
+                background: #0f0f11;
+                color: #e5e5e5;
+                height: 100vh;
+                display: flex;
+                overflow: hidden;
+            }
+
+            .sidebar {
+                width: 280px;
+                background: #17171a;
+                border-right: 1px solid #27272b;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .header {
+                padding: 20px;
+                border-bottom: 1px solid #27272b;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: #4f46e5;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                flex-shrink: 0;
+            }
+
+            .chat-list {
+                flex: 1;
+                overflow-y: auto;
+            }
+
+            .chat-item {
+                padding: 14px 20px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            .chat-item:hover {
+                background: #27272b;
+            }
+
+            .chat-item.active {
+                background: #27272b;
+                border-left: 3px solid var(--primary);
+            }
+
+            .main-chat {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .chat-header {
+                padding: 16px 24px;
+                background: #17171a;
+                border-bottom: 1px solid #27272b;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .messages {
+                flex: 1;
+                padding: 24px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                background: #0f0f11;
+            }
+
+            .message {
+                max-width: 70%;
+                padding: 12px 16px;
+                border-radius: 18px;
+                line-height: 1.4;
+                position: relative;
+            }
+
+            .message.sent {
+                align-self: flex-end;
+                background: var(--primary);
+                color: white;
+                border-bottom-right-radius: 4px;
+            }
+
+            .message.received {
+                align-self: flex-start;
+                background: #27272b;
+                border-bottom-left-radius: 4px;
+            }
+
+            .timestamp {
+                font-size: 11px;
+                opacity: 0.6;
+                margin-top: 4px;
+                display: block;
+            }
+
+            .input-area {
+                padding: 16px 24px;
+                background: #17171a;
+                border-top: 1px solid #27272b;
+            }
+
+            .input-wrapper {
+                display: flex;
+                gap: 12px;
+                align-items: end;
+            }
+
+            #message-input {
+                flex: 1;
+                background: #27272b;
+                border: none;
+                border-radius: 9999px;
+                padding: 14px 20px;
+                color: white;
+                font-size: 15px;
+                resize: none;
+                max-height: 120px;
+                line-height: 1.4;
+            }
+
+            button {
+                background: var(--primary);
+                color: white;
+                border: none;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
+
+            button:hover {
+                background: #4f46e5;
+                transform: scale(1.05);
+            }
+
+            .typing {
+                font-style: italic;
+                color: #888;
+                font-size: 13px;
+                padding: 0 24px 12px;
+            }
+
+            .connection-status {
+                position: fixed;
+                top: 16px;
+                right: 16px;
+                padding: 6px 12px;
+                border-radius: 9999px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .status-connected {
+                background: #22c55e;
+                color: black;
+            }
+
+            .status-disconnected {
+                background: #ef4444;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="header">
+                <div class="avatar">AC</div>
+                <div>
+                    <div style="font-weight: 600">Alex Chen</div>
+                    <div style="font-size: 13px; opacity: 0.7">Online</div>
+                </div>
+            </div>
+
+            <div class="chat-list" id="chat-list">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="main-chat">
+            <div class="chat-header" id="chat-header">
+                <!-- Dynamic -->
+            </div>
+
+            <div class="messages" id="messages"></div>
+
+            <div class="typing" id="typing-indicator" style="display: none">
+                Someone is typing...
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea
+                        id="message-input"
+                        rows="1"
+                        placeholder="Type a message..."
+                    ></textarea>
+                    <button id="send-btn">↑</button>
+                </div>
+                <div
+                    style="
+                        text-align: center;
+                        margin-top: 8px;
+                        font-size: 11px;
+                        opacity: 0.5;
+                    "
+                >
+                    Node.js WebSocket Server • Real-time Multi-user Chat
+                </div>
+            </div>
+        </div>
+
+        <div class="connection-status" id="status">Connecting to server...</div>
+
+        <script>
+            // Simulated contacts
+            const contacts = [
+                {
+                    id: 1,
+                    name: 'Sarah Chen',
+                    avatar: 'SC',
+                    color: '#ec4899',
+                    status: 'online',
+                },
+                {
+                    id: 2,
+                    name: 'Marcus Okoro',
+                    avatar: 'MO',
+                    color: '#10b981',
+                    status: 'away',
+                },
+                {
+                    id: 3,
+                    name: 'Priya Sharma',
+                    avatar: 'PS',
+                    color: '#8b5cf6',
+                    status: 'online',
+                },
+            ]
+
+            let currentChatId = 1
+            let messages = {}
+            let ws = null
+            let isConnected = false
+            let username = 'Alex Chen'
+
+            // Initialize messages
+            contacts.forEach((contact) => {
+                messages[contact.id] = []
+            })
+
+            function formatTime() {
+                const now = new Date()
+                return now.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                })
+            }
+
+            function addMessage(chatId, text, isSent, senderName = '') {
+                if (!messages[chatId]) messages[chatId] = []
+
+                messages[chatId].push({
+                    text,
+                    isSent,
+                    time: formatTime(),
+                    sender: senderName || (isSent ? username : 'Contact'),
+                })
+
+                if (chatId === currentChatId) {
+                    renderMessages()
+                }
+                renderChatList()
+            }
+
+            function renderChatList() {
+                const chatList = document.getElementById('chat-list')
+                chatList.innerHTML = ''
+
+                contacts.forEach((contact) => {
+                    const lastMsg =
+                        messages[contact.id] && messages[contact.id].length > 0
+                            ? messages[contact.id][
+                                  messages[contact.id].length - 1
+                              ].text.substring(0, 35) + '...'
+                            : 'No messages yet'
+
+                    const item = document.createElement('div')
+                    item.className = `chat-item ${contact.id === currentChatId ? 'active' : ''}`
+                    item.innerHTML = `
+                    <div class="avatar" style="background: ${contact.color}">${contact.avatar}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">${contact.name}</div>
+                        <div style="font-size: 13px; opacity: 0.7;">${lastMsg}</div>
+                    </div>
+                    ${contact.status === 'online' ? '<div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%;"></div>' : ''}
+                `
+
+                    item.addEventListener('click', () => {
+                        currentChatId = contact.id
+                        renderChatList()
+                        renderMessages()
+                        document.getElementById('chat-header').innerHTML = `
+                        <div class="avatar" style="background: ${contact.color}">${contact.avatar}</div>
+                        <div>
+                            <div style="font-weight: 600;">${contact.name}</div>
+                            <div style="font-size: 13px; color: #22c55e;">${contact.status === 'online' ? 'Online' : 'Away'}</div>
+                        </div>
+                    `
+                    })
+
+                    chatList.appendChild(item)
+                })
+            }
+
+            function renderMessages() {
+                const container = document.getElementById('messages')
+                container.innerHTML = ''
+
+                const chatMessages = messages[currentChatId] || []
+
+                chatMessages.forEach((msg) => {
+                    const div = document.createElement('div')
+                    div.className = `message ${msg.isSent ? 'sent' : 'received'}`
+                    div.innerHTML = `
+                    ${!msg.isSent ? `<small style="opacity:0.7;">${msg.sender}</small><br>` : ''}
+                    ${msg.text}
+                    <span class="timestamp">${msg.time}</span>
+                `
+                    container.appendChild(div)
+                })
+
+                container.scrollTop = container.scrollHeight
+            }
+
+            // WebSocket Connection to Local Node.js Server
+            function connectWebSocket() {
+                const statusEl = document.getElementById('status')
+
+                // Connect to our local Node.js server
+                ws = new WebSocket('ws://localhost:8080')
+
+                ws.onopen = () => {
+                    isConnected = true
+                    statusEl.textContent = 'Connected to Node.js Server'
+                    statusEl.className = 'connection-status status-connected'
+                    console.log('✅ Connected to local WebSocket server')
+
+                    // Set username
+                    ws.send(
+                        JSON.stringify({
+                            type: 'setUsername',
+                            username: username,
+                        }),
+                    )
+
+                    addMessage(
+                        currentChatId,
+                        'Connected to real Node.js WebSocket server!',
+                        true,
+                    )
+                }
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data)
+                        console.log('Received:', data)
+
+                        if (data.type === 'system') {
+                            // System message (welcome, user joined, etc.)
+                            addMessage(
+                                currentChatId,
+                                data.content,
+                                false,
+                                'System',
+                            )
+                        } else if (data.type === 'message') {
+                            // Chat message
+                            const sender = data.username || 'Someone'
+                            if (data.isOwn) {
+                                // Echo of our own message - already added locally
+                            } else {
+                                addMessage(
+                                    currentChatId,
+                                    data.content,
+                                    false,
+                                    sender,
+                                )
+                            }
+                        }
+                    } catch (e) {
+                        // Plain text fallback
+                        addMessage(currentChatId, event.data, false)
+                    }
+                }
+
+                ws.onclose = () => {
+                    isConnected = false
+                    statusEl.textContent = 'Disconnected - Reconnecting...'
+                    statusEl.className = 'connection-status status-disconnected'
+                    console.log('❌ Disconnected')
+
+                    setTimeout(connectWebSocket, 3000)
+                }
+
+                ws.onerror = (error) => {
+                    console.error('WebSocket error:', error)
+                    statusEl.textContent = 'Connection Error'
+                }
+            }
+
+            function showTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator')
+                indicator.style.display = 'block'
+                setTimeout(() => {
+                    indicator.style.display = 'none'
+                }, 1200)
+            }
+
+            function sendMessage() {
+                const input = document.getElementById('message-input')
+                const text = input.value.trim()
+
+                if (!text || !ws || ws.readyState !== WebSocket.OPEN) return
+
+                // Add locally immediately
+                addMessage(currentChatId, text, true)
+
+                // Send to server
+                ws.send(
+                    JSON.stringify({
+                        type: 'chat',
+                        content: text,
+                        room: 'general',
+                    }),
+                )
+
+                input.value = ''
+
+                // Simulate other users replying
+                setTimeout(() => {
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        const replies = [
+                            'Totally agree! 👍',
+                            'This is a great point',
+                            'What do you think we should do next?',
+                            'Haha exactly',
+                            'Love this idea!',
+                        ]
+                        const reply =
+                            replies[Math.floor(Math.random() * replies.length)]
+                        ws.send(
+                            JSON.stringify({
+                                type: 'chat',
+                                content: reply,
+                                room: 'general',
+                            }),
+                        )
+                    }
+                }, 900)
+            }
+
+            function setupEventListeners() {
+                const input = document.getElementById('message-input')
+                const sendBtn = document.getElementById('send-btn')
+
+                sendBtn.addEventListener('click', sendMessage)
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault()
+                        sendMessage()
+                    }
+                })
+
+                // Auto-resize
+                input.addEventListener('input', function () {
+                    this.style.height = 'auto'
+                    this.style.height = Math.min(this.scrollHeight, 120) + 'px'
+                })
+            }
+
+            function init() {
+                renderChatList()
+
+                const firstContact = contacts[0]
+                document.getElementById('chat-header').innerHTML = `
+                <div class="avatar" style="background: ${firstContact.color}">${firstContact.avatar}</div>
+                <div>
+                    <div style="font-weight: 600;">${firstContact.name}</div>
+                    <div style="font-size: 13px; color: #22c55e;">Online</div>
+                </div>
+            `
+                renderMessages()
+
+                setupEventListeners()
+                connectWebSocket()
+
+                // Initial demo message
+                setTimeout(() => {
+                    addMessage(
+                        1,
+                        'Hey Alex! Ready for the demo?',
+                        false,
+                        'Sarah Chen',
+                    )
+                    renderChatList()
+                }, 500)
+            }
+
+            window.onload = init
+        </script>
+    </body>
+</html>
